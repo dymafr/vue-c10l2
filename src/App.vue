@@ -48,6 +48,24 @@ function removeProductFromCart(productId: number): void {
 }
 
 const cartEmpty = computed(() => state.cart.length === 0);
+
+const filteredProducts = computed(() => {
+  return state.products.filter((product) => {
+    if (
+      product.title
+        .toLocaleLowerCase()
+        .startsWith(state.filters.search.toLocaleLowerCase()) &&
+      product.price >= state.filters.priceRange[0] &&
+      product.price <= state.filters.priceRange[1] &&
+      (product.category === state.filters.category ||
+        state.filters.category === 'all')
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  });
+});
 </script>
 
 <template>
@@ -59,7 +77,7 @@ const cartEmpty = computed(() => state.cart.length === 0);
   >
     <TheHeader class="header" />
     <Shop
-      :products="state.products"
+      :products="filteredProducts"
       @add-product-to-cart="addProductToCart"
       class="shop"
     />
