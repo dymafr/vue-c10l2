@@ -20,7 +20,7 @@ const state = reactive<{
 }>({
   products: data,
   cart: [],
-  filters: DEFAULT_FILTERS,
+  filters: { ...DEFAULT_FILTERS },
 });
 
 function addProductToCart(productId: number): void {
