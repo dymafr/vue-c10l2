@@ -9,6 +9,7 @@ import type {
   FiltersInterface,
   ProductCartInterface,
   ProductInterface,
+  FilterUpdate,
 } from './interfaces';
 import { DEFAULT_FILTERS } from './data/filters';
 
@@ -47,6 +48,18 @@ function removeProductFromCart(productId: number): void {
   }
 }
 
+function updateFilter(filterUpdate: FilterUpdate) {
+  if (filterUpdate.search !== undefined) {
+    state.filters.search = filterUpdate.search;
+  } else if (filterUpdate.priceRange) {
+    state.filters.priceRange = filterUpdate.priceRange;
+  } else if (filterUpdate.category) {
+    state.filters.category = filterUpdate.category;
+  } else {
+    state.filters = { ...DEFAULT_FILTERS };
+  }
+}
+
 const cartEmpty = computed(() => state.cart.length === 0);
 
 const filteredProducts = computed(() => {
@@ -77,6 +90,7 @@ const filteredProducts = computed(() => {
   >
     <TheHeader class="header" />
     <Shop
+      @update-filter="updateFilter"
       :products="filteredProducts"
       @add-product-to-cart="addProductToCart"
       class="shop"
